@@ -47,7 +47,7 @@ class DatabaseManager:
         
         conn.commit()
         conn.close()
-        print("✅ Banco de dados inicializado com sucesso!")
+        print("Banco de dados inicializado com sucesso")
     
     def insert_sample_data(self):
         """Insere dados de exemplo de jogos"""
@@ -140,14 +140,14 @@ class DatabaseManager:
         
         conn.commit()
         conn.close()
-        print("✅ Dados de exemplo inseridos com sucesso!")
+        print("Dados de exemplo inseridos com sucesso")
     
     def get_all_games(self):
         """Retorna todos os jogos do banco SEM DUPLICATAS"""
         conn = sqlite3.connect(self.db_name)
         c = conn.cursor()
         
-        # ✅ GROUP BY title para evitar duplicatas
+        # GROUP BY title para evitar duplicatas
         c.execute('''
             SELECT *, MIN(id) as min_id 
             FROM games 
@@ -192,4 +192,5 @@ class DatabaseManager:
 if __name__ == '__main__':
     db = DatabaseManager()
     db.insert_sample_data()
+
     print("Jogos no banco:", len(db.get_all_games()))
