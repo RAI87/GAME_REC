@@ -1,16 +1,16 @@
-﻿# 🎮 GAME REC - Sistema de Recomendação de Video Games
+﻿# GAME REC - Sistema de Recomendação de Video Games
 
 Sistema completo de recomendação de jogos usando Python, Flask e Machine Learning.
 
-## 🚀 Funcionalidades
+## Funcionalidades
 
-- ✅ Recomendação baseada em título de jogo
-- ✅ Recomendação baseada em características (tags, gênero, etc.)
-- ✅ Busca de jogos no banco de dados
-- ✅ Interface web responsiva
-- ✅ API REST completa
+- Recomendação baseada em título de jogo
+- Recomendação baseada em características (tags, gênero, etc.)
+- Busca de jogos no banco de dados
+- Interface web responsiva
+- API REST completa
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - **Backend**: Python, Flask
 - **Banco de Dados**: SQLite
@@ -18,9 +18,10 @@ Sistema completo de recomendação de jogos usando Python, Flask e Machine Learn
 - **Frontend**: HTML5, CSS3, JavaScript
 - **NLP**: TF-IDF, Cosine Similarity
 
-## 📦 Instalação
+## Instalação
 
 1. Clone o repositório:
 ```bash
 git clone <url-do-repositorio>
+
 cd gamerec-project
