@@ -20,8 +20,9 @@ Sistema completo de recomendação de jogos usando Python, Flask e Machine Learn
 
 ## Instalação
 
-1. Clone o repositório:
+Clone o repositório:
 ```bash
 git clone <url-do-repositorio>
 
 cd gamerec-project
+
