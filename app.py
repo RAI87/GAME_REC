@@ -24,12 +24,12 @@ class DatabaseManager:
         # Verifica se a tabela já existe
         c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='games'")
         if c.fetchone():
-            print("✅ Tabela já existe - pulando criação")
+            print("Tabela já existe")
             conn.close()
             return
         
         # Só cria se não existir
-        print("📦 Criando tabela pela primeira vez...")
+        print("Criando tabela pela primeira vez")
 
         """Inicializa o banco de dados com tabela e dados de exemplo"""
         conn = sqlite3.connect(self.db_name)
@@ -114,7 +114,7 @@ class SimpleRecommender:
     """Sistema de recomendação simplificado e confiável"""
     
     def __init__(self):
-        print("✅ Sistema de recomendação simples inicializado!")
+        print("Sistema de recomendação simples inicializado")
         self.games = [
             {
                 'title': 'The Witcher 3: Wild Hunt',
@@ -187,7 +187,7 @@ class SimpleRecommender:
             return recommendations if recommendations else self.games[:top_n]
             
         except Exception as e:
-            print(f"❌ Erro na recomendação simples: {e}")
+            print(f"Erro na recomendação simples: {e}")
             return self.games[:top_n]
     
     def recommend_by_features(self, features, top_n=3):
@@ -212,7 +212,7 @@ class SimpleRecommender:
             return [game for game, score in recommendations[:top_n]]
             
         except Exception as e:
-            print(f"❌ Erro na recomendação por features: {e}")
+            print(f"Erro na recomendação por features: {e}")
             return self.games[:top_n]
 
 # ================= INICIALIZAÇÃO DA APLICAÇÃO =================
@@ -228,14 +228,14 @@ try:
     # Tenta importar o sistema avançado
     from recommender import GameRecommender
     recommender = GameRecommender()
-    print("✅ Sistema de recomendação avançado carregado!")
+    print("Sistema de recomendação avançado carregado")
 except ImportError as e:
-    print(f"⚠️  Sistema avançado não disponível: {e}")
-    print("⚠️  Usando sistema de recomendação simples...")
+    print(f"Sistema avançado não disponível: {e}")
+    print("Usando sistema de recomendação simples")
     recommender = SimpleRecommender()
 except Exception as e:
-    print(f"⚠️  Erro no sistema avançado: {e}")
-    print("⚠️  Usando sistema de recomendação simples...")
+    print(f"Erro no sistema avançado: {e}")
+    print("Usando sistema de recomendação simples...")
     recommender = SimpleRecommender()
 
 # ================= ROTAS DA API =================
@@ -389,4 +389,5 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         print("\n🛑 Servidor parado pelo usuário")
     except Exception as e:
+
         print(f"\n❌ Erro ao iniciar servidor: {e}")
