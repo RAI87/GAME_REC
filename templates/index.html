@@ -1,0 +1,171 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 GAME REC - Sistema de Recomendação</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮 GAME REC</h1>
+            <p>Sistema Inteligente de Recomendação de Video Games</p>
+        </header>
+
+        <div class="search-section">
+            <h2>🔍 Buscar Jogo</h2>
+            <input type="text" id="searchInput" placeholder="Digite o nome de um jogo...">
+            <button onclick="searchGames()">Buscar</button>
+            <div id="searchResults" class="results"></div>
+        </div>
+
+        <div class="recommendation-section">
+            <h2>🎯 Recomendações por Título</h2>
+            <input type="text" id="gameInput" placeholder="Ex: The Witcher 3">
+            <button onclick="recommendByTitle()">Recomendar</button>
+            <div id="titleResults" class="results"></div>
+        </div>
+
+        <div class="features-section">
+            <h2>✨ Recomendações por Características</h2>
+            <textarea id="featuresInput" placeholder="Ex: rpg fantasia mundo aberto multiplayer"></textarea>
+            <button onclick="recommendByFeatures()">Recomendar</button>
+            <div id="featuresResults" class="results"></div>
+        </div>
+
+        <div class="all-games-section">
+            <h2>📋 Todos os Jogos</h2>
+            <button onclick="loadAllGames()">Carregar Todos</button>
+            <div id="allGames" class="results"></div>
+        </div>
+    </div>
+
+    <script>
+        // Funções JavaScript para comunicação com a API - VERSÃO CORRIGIDA
+        async function searchGames() {
+            const query = document.getElementById('searchInput').value;
+            if (!query) return;
+
+            try {
+                const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    displayResults(data.results, 'searchResults', `Resultados para "${query}":`);
+                } else {
+                    showError('searchResults', data.error || 'Erro na busca');
+                }
+            } catch (error) {
+                showError('searchResults', 'Erro de conexão');
+            }
+        }
+
+        async function recommendByTitle() {
+            const title = document.getElementById('gameInput').value;
+            if (!title) return;
+
+            try {
+                const response = await fetch(`/api/recommend/title?title=${encodeURIComponent(title)}&n=3`);
+                const data = await response.json();
+
+                if (data.success) {
+                    displayResults(data.recommendations, 'titleResults',
+                        `Quem gostou de "${data.input_game}" também gostou de:`);
+                } else {
+                    showError('titleResults', data.error || 'Jogo não encontrado');
+                }
+            } catch (error) {
+                showError('titleResults', 'Erro de conexão');
+            }
+        }
+
+        async function recommendByFeatures() {
+            const features = document.getElementById('featuresInput').value;
+            if (!features) return;
+
+            try {
+                const response = await fetch('/api/recommend/features', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ features: features, n: 3 })
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    displayResults(data.recommendations, 'featuresResults',
+                        `Recomendações para "${data.input_features}":`);
+                } else {
+                    showError('featuresResults', data.error || 'Erro na recomendação');
+                }
+            } catch (error) {
+                showError('featuresResults', 'Erro de conexão');
+            }
+        }
+
+        async function loadAllGames() {
+            try {
+                const response = await fetch('/api/games');
+                const data = await response.json();
+
+                if (data.success) {
+                    displayResults(data.games, 'allGames', 'Todos os Jogos:');
+                } else {
+                    showError('allGames', data.error || 'Erro ao carregar jogos');
+                }
+            } catch (error) {
+                showError('allGames', 'Erro de conexão');
+            }
+        }
+
+        function displayResults(results, elementId, title) {
+            const container = document.getElementById(elementId);
+
+            if (!results || results.length === 0) {
+                container.innerHTML = '<div class="no-results">Nenhum resultado encontrado</div>';
+                return;
+            }
+
+            let html = `<h3>${title}</h3>`;
+
+            results.forEach(game => {
+                // ⚠️ CORREÇÃO: Verifica se as propriedades existem
+                const title = game.title || 'Título não disponível';
+                const genre = game.genre || 'Gênero não disponível';
+                const platform = game.platform || 'Plataforma não disponível';
+                const price = game.price !== undefined ? `R$ ${game.price.toFixed(2)}` : 'Preço não disponível';
+                const rating = game.rating !== undefined ? game.rating : 'N/A';
+                const description = game.description || 'Descrição não disponível';
+                const tags = game.tags || [];
+
+                html += `
+                    <div class="game-card">
+                        <h4>${title}</h4>
+                        <p><strong>Gênero:</strong> ${genre}</p>
+                        <p><strong>Plataforma:</strong> ${platform}</p>
+                        <p><strong>Preço:</strong> ${price}</p>
+                        <p><strong>Avaliação:</strong> ${rating}/10</p>
+                        <p>${description}</p>
+                        <div class="tags">
+                            ${tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function showError(elementId, message) {
+            document.getElementById(elementId).innerHTML = `
+                <div class="error">❌ ${message}</div>
+            `;
+        }
+
+        // Carrega alguns jogos automaticamente ao abrir a página
+        document.addEventListener('DOMContentLoaded', function () {
+            loadAllGames();
+        });
+    </script>
+</body>
+</html>
