@@ -13,7 +13,7 @@ class GameRecommender:  # ← NOME EXATO DA CLASSE
         """
         Inicializa o sistema de recomendação
         """
-        print("✅ Inicializando GameRecommender...")
+        print("Inicializando GameRecommender")
         self.vectorizer = TfidfVectorizer(stop_words='english', max_features=1000)
         self.games_data = self._get_sample_data()
         
@@ -126,7 +126,7 @@ class GameRecommender:  # ← NOME EXATO DA CLASSE
             return recommendations
             
         except Exception as e:
-            print(f"❌ Erro na recomendação: {e}")
+            print(f"Erro na recomendação: {e}")
             return self.games_data[:top_n]  # Fallback
     
     def recommend_by_features(self, features, top_n=3):
@@ -151,12 +151,13 @@ class GameRecommender:  # ← NOME EXATO DA CLASSE
             return recommendations
             
         except Exception as e:
-            print(f"❌ Erro na recomendação por features: {e}")
+            print(f"Erro na recomendação por features: {e}")
             return self.games_data[:top_n]
 
 # Teste do módulo
 if __name__ == '__main__':
-    print("🧪 Testando GameRecommender...")
+    print("Testando GameRecommender")
     recommender = GameRecommender()
     recommendations = recommender.recommend_games("The Witcher 3")
-    print("✅ Recomendações:", [r['title'] for r in recommendations])rue)
+
+    print("Recomendações:", [r['title'] for r in recommendations])rue)
